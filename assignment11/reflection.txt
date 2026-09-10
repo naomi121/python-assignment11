@@ -1,0 +1,8 @@
+Static vs. Interactive Visualizations:
+Static visualizations (like Matplotlib charts) are best for fixed print reports and quick summaries where interactive data filtering isn't required. Interactive visualizations (like Plotly) allow users to hover over data points for exact values, zoom into regions, and isolate specific subsets dynamically.
+
+Real-Time Exploration Dashboards:
+Dashboards enable direct data exploration by bringing key performance indicators and interactive widgets into a central interface. Users can slice and analyze complex datasets on the fly without changing code or needing manual updates from data analysts.
+
+Data Communication with Plotly:
+Interactive tools like Plotly bridge the gap between analysts and decision-makers by making data accessible. Presenting interactive, clear visualizations keeps stakeholders engaged and allows them to investigate underlying patterns during discussions.
