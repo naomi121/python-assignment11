@@ -1,6 +1,5 @@
 import plotly.express as px
 import plotly.data as pldata
-import webbrowser
 import os
 
 # 1. Load Plotly wind dataset
@@ -30,11 +29,8 @@ html_filename = "wind.html"
 fig.write_html(html_filename)
 print(f"\nSaved interactive plot to {html_filename} successfully!")
 
-# 5. Load and verify the HTML file (Required by Task 3)
-if os.path.exists(html_filename):
-    with open(html_filename, 'r', encoding='utf-8') as f:
-        html_content = f.read()
-    print(f"Verified: {html_filename} successfully read ({len(html_content)} bytes).")
-    
-    # Automatically open in browser for interactive verification
-    webbrowser.open('file://' + os.path.realpath(html_filename))
+# 5. Load and verify wind.html (Task 3 Save & Load requirement)
+with open(html_filename, 'r', encoding='utf-8') as f:
+    html_contents = f.read()
+
+print(f"Loaded {html_filename} successfully! File size: {len(html_contents)} bytes.")
