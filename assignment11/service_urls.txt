@@ -1,0 +1,8 @@
+Streamlit App URL:
+https://web-scraping-capstone-neuubcw7oaujinfnpanpv.streamlit.app
+
+Web Scraping Capstone GitHub Repository:
+https://github.com/naomi121/web-scraping-capstone
+
+Assignment 11 GitHub Repository:
+https://github.com/naomi121/python-assignment11
