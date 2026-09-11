@@ -1,40 +1,45 @@
-import plotly.express as px
 import plotly.data as pldata
-import webbrowser
-import os
+import plotly.express as px
 
-# 1. Load Plotly wind dataset
+# 1. Load wind dataset using pldata.wind(return_type='pandas')
 df = pldata.wind(return_type='pandas')
 
-# Print first and last 10 rows
+# 2. Print first 10 and last 10 rows
 print("--- First 10 Rows ---")
 print(df.head(10))
+
 print("\n--- Last 10 Rows ---")
 print(df.tail(10))
 
-# 2. Clean 'strength' column (extract numeric values)
-df['strength'] = df['strength'].astype(str).str.extract(r'(\d+\.?\d*)').astype(float)
+# 3. Clean the strength column using .str.replace() and convert to float
+# Strip '+' signs using pandas .str.replace()
+df['strength'] = df['strength'].astype(str).str.replace('+', '', regex=False)
 
-# 3. Create interactive scatter plot
+# Convert range strings (like '0-1') to average numeric floats
+def parse_range(val):
+    if '-' in val:
+        parts = val.split('-')
+        return (float(parts[0]) + float(parts[1])) / 2
+    return float(val)
+
+df['strength'] = df['strength'].apply(parse_range)
+
+# 4. Create scatter plot with strength vs frequency
 fig = px.scatter(
     df,
-    x="strength",
-    y="frequency",
+    x="frequency",
+    y="strength",
     color="direction",
-    title="Wind Strength vs. Frequency by Direction",
-    labels={"strength": "Wind Strength", "frequency": "Frequency"}
+    title="Wind Dataset: Frequency vs Strength by Direction",
+    labels={"frequency": "Frequency", "strength": "Strength"}
 )
 
-# 4. Save plot as wind.html
-html_filename = "wind.html"
-fig.write_html(html_filename)
-print(f"\nSaved interactive plot to {html_filename} successfully!")
+# 5. Save interactive HTML file
+fig.write_html("wind.html")
 
-# 5. Load and verify the HTML file (Required by Task 3)
-if os.path.exists(html_filename):
-    with open(html_filename, 'r', encoding='utf-8') as f:
-        html_content = f.read()
-    print(f"Verified: {html_filename} successfully read ({len(html_content)} bytes).")
-    
-    # Automatically open in browser for interactive verification
-    webbrowser.open('file://' + os.path.realpath(html_filename))
+# 6. Verify HTML file can be read back in
+with open("wind.html", "r", encoding="utf-8") as f:
+    html_content = f.read()
+
+print(f"\nVerification: wind.html successfully loaded ({len(html_content)} characters read).")
+
