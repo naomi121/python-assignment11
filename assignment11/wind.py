@@ -1,9 +1,16 @@
+import os
 import pandas as pd
 import plotly.express as px
 
-# 1. Load the dataset
-# Adjust the filename/path if your CSV file has a specific name
-df = pd.read_csv("assignment11/wind.csv") 
+# 1. Load the dataset (handles db directory or local paths automatically)
+if os.path.exists("db/wind.csv"):
+    df = pd.read_csv("db/wind.csv")
+elif os.path.exists("db") and os.path.isfile("db"):
+    df = pd.read_csv("db")
+elif os.path.exists("assignment11/wind.csv"):
+    df = pd.read_csv("assignment11/wind.csv")
+else:
+    df = pd.read_csv("wind.csv")
 
 # 2. Print first and last 10 rows as required
 print("First 10 rows:")
@@ -24,6 +31,6 @@ fig = px.scatter(
     title="Wind Direction vs Strength"
 )
 
-# 5. Save the interactive HTML file inside assignment11 directory
+# 5. Save the interactive HTML file inside the assignment11 directory
 fig.write_html("assignment11/wind.html")
 print("wind.html successfully generated in assignment11/")
