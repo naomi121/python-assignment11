@@ -1,16 +1,9 @@
-import os
 import pandas as pd
 import plotly.express as px
+import plotly.data as pldata
 
-# 1. Load the dataset (handles db directory or local paths automatically)
-if os.path.exists("db/wind.py"):
-    df = pd.read_csv("db/wind.py")
-elif os.path.exists("db") and os.path.isfile("db"):
-    df = pd.read_csv("db")
-elif os.path.exists("assignment11/wind.py"):
-    df = pd.read_csv("assignment11/wind.py")
-else:
-    df = pd.read_csv("wind.py")
+# 1. Load the built-in Plotly wind dataset
+df = pldata.wind(return_type='pandas')
 
 # 2. Print first and last 10 rows as required
 print("First 10 rows:")
@@ -18,17 +11,17 @@ print(df.head(10))
 print("\nLast 10 rows:")
 print(df.tail(10))
 
-# 3. Clean strength column using .str.replace()
-df['strength'] = df['strength'].astype(str).str.replace('knots', '', regex=False)
-df['strength'] = df['strength'].str.replace('knot', '', regex=False)
-df['strength'] = pd.to_numeric(df['strength'], errors='coerce')
+# 3. Clean strength column using str.replace() then convert to float
+df['strength'] = df['strength'].astype(str).str.replace(r'\D+', '', regex=True)
+df['strength'] = df['strength'].astype(float)
 
-# 4. Create the Plotly scatter plot
+# 4. Create the interactive scatter plot: strength vs frequency, colored by direction
 fig = px.scatter(
-    df, 
-    x="direction", 
-    y="strength", 
-    title="Wind Direction vs Strength"
+    df,
+    x="strength",
+    y="frequency",
+    color="direction",
+    title="Wind Strength vs Frequency by Direction"
 )
 
 # 5. Save the interactive HTML file inside the assignment11 directory
