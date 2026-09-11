@@ -1,45 +1,29 @@
-import plotly.data as pldata
+import pandas as pd
 import plotly.express as px
 
-# 1. Load wind dataset using pldata.wind(return_type='pandas')
-df = pldata.wind(return_type='pandas')
+# 1. Load the dataset
+# Adjust the filename/path if your CSV file has a specific name
+df = pd.read_csv("assignment11/wind.csv") 
 
-# 2. Print first 10 and last 10 rows
-print("--- First 10 Rows ---")
+# 2. Print first and last 10 rows as required
+print("First 10 rows:")
 print(df.head(10))
-
-print("\n--- Last 10 Rows ---")
+print("\nLast 10 rows:")
 print(df.tail(10))
 
-# 3. Clean the strength column using .str.replace() and convert to float
-# Strip '+' signs using pandas .str.replace()
-df['strength'] = df['strength'].astype(str).str.replace('+', '', regex=False)
+# 3. Clean strength column using .str.replace()
+df['strength'] = df['strength'].astype(str).str.replace('knots', '', regex=False)
+df['strength'] = df['strength'].str.replace('knot', '', regex=False)
+df['strength'] = pd.to_numeric(df['strength'], errors='coerce')
 
-# Convert range strings (like '0-1') to average numeric floats
-def parse_range(val):
-    if '-' in val:
-        parts = val.split('-')
-        return (float(parts[0]) + float(parts[1])) / 2
-    return float(val)
-
-df['strength'] = df['strength'].apply(parse_range)
-
-# 4. Create scatter plot with strength vs frequency
+# 4. Create the Plotly scatter plot
 fig = px.scatter(
-    df,
-    x="frequency",
-    y="strength",
-    color="direction",
-    title="Wind Dataset: Frequency vs Strength by Direction",
-    labels={"frequency": "Frequency", "strength": "Strength"}
+    df, 
+    x="direction", 
+    y="strength", 
+    title="Wind Direction vs Strength"
 )
 
-# 5. Save interactive HTML file
-fig.write_html("wind.html")
-
-# 6. Verify HTML file can be read back in
-with open("wind.html", "r", encoding="utf-8") as f:
-    html_content = f.read()
-
-print(f"\nVerification: wind.html successfully loaded ({len(html_content)} characters read).")
-
+# 5. Save the interactive HTML file inside assignment11 directory
+fig.write_html("assignment11/wind.html")
+print("wind.html successfully generated in assignment11/")
