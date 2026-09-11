@@ -3,14 +3,14 @@ import pandas as pd
 import plotly.express as px
 
 # 1. Load the dataset (handles db directory or local paths automatically)
-if os.path.exists("db/wind.csv"):
-    df = pd.read_csv("db/wind.csv")
+if os.path.exists("db/wind.py"):
+    df = pd.read_csv("db/wind.py")
 elif os.path.exists("db") and os.path.isfile("db"):
     df = pd.read_csv("db")
-elif os.path.exists("assignment11/wind.csv"):
-    df = pd.read_csv("assignment11/wind.csv")
+elif os.path.exists("assignment11/wind.py"):
+    df = pd.read_csv("assignment11/wind.py")
 else:
-    df = pd.read_csv("wind.csv")
+    df = pd.read_csv("wind.py")
 
 # 2. Print first and last 10 rows as required
 print("First 10 rows:")
