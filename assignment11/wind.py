@@ -1,45 +1,32 @@
-import plotly.data as pldata
+import os
+import pandas as pd
 import plotly.express as px
+import plotly.data as pldata
 
-# 1. Load wind dataset using pldata.wind(return_type='pandas')
+# 1. Load the built-in Plotly wind dataset
 df = pldata.wind(return_type='pandas')
 
-# 2. Print first 10 and last 10 rows
-print("--- First 10 Rows ---")
+# 2. Print first and last 10 rows as required
+print("First 10 rows:")
 print(df.head(10))
-
-print("\n--- Last 10 Rows ---")
+print("\nLast 10 rows:")
 print(df.tail(10))
 
-# 3. Clean the strength column using .str.replace() and convert to float
-# Strip '+' signs using pandas .str.replace()
-df['strength'] = df['strength'].astype(str).str.replace('+', '', regex=False)
+# 3. Clean strength column: keep digits and decimal point, then convert to float
+df['strength'] = df['strength'].astype(str).str.replace(r'[^\d.]', '', regex=True)
+df['strength'] = df['strength'].astype(float)
 
-# Convert range strings (like '0-1') to average numeric floats
-def parse_range(val):
-    if '-' in val:
-        parts = val.split('-')
-        return (float(parts[0]) + float(parts[1])) / 2
-    return float(val)
-
-df['strength'] = df['strength'].apply(parse_range)
-
-# 4. Create scatter plot with strength vs frequency
+# 4. Create the interactive scatter plot: strength vs frequency, colored by direction
 fig = px.scatter(
     df,
-    x="frequency",
-    y="strength",
+    x="strength",
+    y="frequency",
     color="direction",
-    title="Wind Dataset: Frequency vs Strength by Direction",
-    labels={"frequency": "Frequency", "strength": "Strength"}
+    title="Wind Strength vs Frequency by Direction"
 )
 
-# 5. Save interactive HTML file
-fig.write_html("wind.html")
-
-# 6. Verify HTML file can be read back in
-with open("wind.html", "r", encoding="utf-8") as f:
-    html_content = f.read()
-
-print(f"\nVerification: wind.html successfully loaded ({len(html_content)} characters read).")
-
+# 5. Save wind.html next to this script, regardless of working directory
+script_dir = os.path.dirname(os.path.abspath(__file__))
+output_path = os.path.join(script_dir, "wind.html")
+fig.write_html(output_path)
+print(f"wind.html successfully generated at {output_path}")

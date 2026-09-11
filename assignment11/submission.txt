@@ -1,0 +1,8 @@
+Assignment 11 - Advanced Data Visualization
+
+Tasks completed:
+Task 1 - employee_results.py
+Task 2 - cumulative.py
+Task 3 - wind.py and wind.html
+Task 4 - reflection.txt
+Task 5 - All assignment files committed to the assignment11 branch.
